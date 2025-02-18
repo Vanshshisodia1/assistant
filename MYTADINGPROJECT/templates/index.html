@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trading Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #2d3e50, #4b5f75);
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 2.5rem;
+            text-align: center;
+            color: #333;
+        }
+
+        /* Header */
+        .header h1 {
+            color: #0077b6;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Form Styling */
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0077b6;
+        }
+
+        /* Button Styling */
+        .submit-btn {
+            padding: 0.9rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background-color: #0077b6;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background-color: #005f87;
+        }
+
+        /* Result Styling */
+        .result-container {
+            margin-top: 2.5rem;
+            text-align: center;
+        }
+
+        .result-container h2 {
+            font-size: 1.8rem;
+            color: #0077b6;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            margin: 1.5rem 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Table Styling */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        table th, table td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #0077b6;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        table td {
+            background-color: #f9f9f9;
+        }
+
+        /* Error Styling */
+        .error {
+            color: #ff4d4f;
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .form-group label, .submit-btn, .error {
+                font-size: 0.95rem;
+            }
+
+            table th, table td {
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Stock Trading Assistant</h1>
+            <p>Analyze stocks using moving averages, RSI, and MACD signals.</p>
+        </div>
+
+        <form class="form" method="POST">
+            <div class="form-group">
+                <label for="symbol">Stock Symbol</label>
+                <input type="text" id="symbol" name="symbol" placeholder="Enter Stock Symbol (e.g., NIFTYBEES.NS)" required>
+            </div>
+
+            <div class="form-group">
+                <label for="start_date">Start Date</label>
+                <input type="date" id="start_date" name="start_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="end_date">End Date</label>
+                <input type="date" id="end_date" name="end_date" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Analyze</button>
+        </form>
+
+        {% if plot_url %}
+            <div class="result-container">
+                <h2>Analysis Results for {{ symbol }}</h2>
+                <div class="chart-container">
+                    <img src="data:image/png;base64,{{ plot_url }}" alt="Stock Analysis Chart">
+                </div>
+                <div class="table-container">{{ result|safe }}</div>
+            </div>
+        {% elif error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
